@@ -12,17 +12,17 @@ class PersonDao:
         )
         #print("connection made")
 
-    def create (self, newperson):
+    def create(self, newperson):
         cursor = self.db.cursor()
-        sql = "insert into person (personname, age) values (%s, %s, %s)"
+        sql = "insert into person (personid, personname, age) values (%s, %s, %s)"
         values = [
+           newperson['personid'],
            newperson['personname'],
            newperson['age']
         ]
-        cursor.execute(sql,values)
+        cursor.execute(sql, values)
         self.db.commit()
         return cursor.lastrowid
-
 
     def getAll(self):
          cursor = self.db.cursor()
@@ -30,9 +30,9 @@ class PersonDao:
          cursor.execute(sql) 
          results = cursor.fetchall()
          returnArray=[]
-        # print(results)
+         #print(results)
          for result in results:
-            resultAsDict=self.convertToDict(result)
+            resultAsDict = self.convertToDict(result)
             returnArray.append(resultAsDict)
 
          return returnArray
@@ -53,7 +53,7 @@ class PersonDao:
            person['personname'],
            person['age'],
            person['personid']
-        ]
+       ]
         cursor.execute(sql,values)
         self.db.commit()
         return person

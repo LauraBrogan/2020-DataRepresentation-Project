@@ -1,17 +1,18 @@
 from PersonDao import personDao
 
 newperson1 = {
-       'personid': 13,
-       'personname':'kieran',
-       'age':56,
+       'personid': 20,
+       'personname':'sean',
+       'age':66
 }
 
 newperson2 = {
-       'personid': 16,
+       'personid': 2,
        'personname':'iarla',
        'age':66,
 }
 #returnValue = personDao.create(newperson)
+#print(returnValue)
 returnValue =  personDao.getAll() 
 print (returnValue)
 returnValue =  personDao.findByID(newperson2['personid']) 
