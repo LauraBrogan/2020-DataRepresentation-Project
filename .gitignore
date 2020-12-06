@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+#iignore files that end in config so they are not uploaded to git hub
+*config.py
