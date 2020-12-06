@@ -1,27 +1,29 @@
 from PersonDao import personDao
 
-newperson1 = {
-       'personid': 20,
-       'personname':'sean',
-       'age':66
+
+person1 = {
+   'personid': 27,
+   'personname':'eugene',
+   'age':45
 }
 
-newperson2 = {
-       'personid': 2,
-       'personname':'iarla',
-       'age':66,
+person2 = {
+       'personid': 27,
+       'personname':'martin',
+       'age':50,
 }
-#returnValue = personDao.create(newperson)
+#returnValue = personDao.create(person)
 #print(returnValue)
-returnValue =  personDao.getAll() 
+returnValue = personDao.getAll()
+print(returnValue)
+returnValue =  personDao.findByID(person2['personid']) 
+print("find byID")
 print (returnValue)
-returnValue =  personDao.findByID(newperson2['personid']) 
-print ("Find by Id")
-returnValue =  personDao.update(newperson2) 
+returnValue =  personDao.update(person2) 
 print (returnValue)
-returnValue =  personDao.findByID(newperson2['personid']) 
+returnValue =  personDao.findByID(person2['personid']) 
 print (returnValue)
-returnValue =  personDao.delete(newperson2['personid']) 
+returnValue =  personDao.delete(person2['personid']) 
 print (returnValue)
 returnValue =  personDao.getAll() 
 print (returnValue)
