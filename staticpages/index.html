@@ -1,13 +1,45 @@
-<html>
+<!DOCTYPE html>
+<!--Author Laura Brogan 05/12/2020-->
     <head>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!--Title this is the page title and will appear on as tab heading-->
+        <title>People from Holidays Database</title>
 
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         
     </head>
+<!--Style has which has only one acceptalbe value:text/css is for style rules embedded within the page -->	
+    <style type = "text/css">
+    
+/*Below I give the styles for the body and paragraphs on webpage*/
+body 
+{
+font-family: Georgia, Times, serif;
+font-size:25px; 
+text-align: justify;
+padding:30px;
+margin:5px;
+border-style: solid;
+border-color: green;
+border-width: 10px 15px;
+}
+
+/*Here I define a calss that I can apply to section of my webpage with a different style*/
+.myClass
+{
+color:red;
+text-align: center;
+}
+</style>
+
         <body>
-            <div id="create-update"style="display:none">
+<!--This is a h1 heading which has been given the class MyClass for styling-->
+    <h1 class = "myClass">
+    Welcome to Person Table
+    </h1>
+
+            <div id="create-update" style="display:none">
                 <h2>Create Update</h2>
                 <table id="createUpdateForm">
                     <tr>
@@ -16,24 +48,25 @@
                     </tr>
                     <tr>
                         <td>personname</td>
-                        <td><input type="text" name="personname"></td>    
+                        <td><input type="text" name="personname"></td>     
                     </tr>
-                    <tr>        
+                    <tr>
                         <td>age</td>
-                        <td><input type="number" name="age"></td>   
-                    </td>
+                        <td><input type="number" name="age"></td> 
+                    </tr>
                     <tr>
                         <td>
                             <button id="create-button" onclick ="doCreate()">Create</button>
-                        </td>
-                        <td>
-                            <button id="update-button" onclick ="doUpdate()">update</button>
-                        </td>
+                        </td> 
                     </tr>
+                         <tr>
+                         <td>
+                            <button id="update-button" onclick ="doUpdate()">update</button>
+                        </td>    
                 </table>
             </div>
             <div id="display">
-                <h2>Person</h2>
+                <h2>People</h2>
                 <button onClick="showCreate()">Create</button>
                 <table id="personTable" class="table">
                     <tr>
@@ -43,10 +76,12 @@
                         <th></th>
                         <th></th>
                     </tr>
+                      
                 </table>
 
             </div>
             <script>
+
                 function showCreate(){
                     document.getElementById('display').style.display = "none"
                     document.getElementById('update-button').style.display = "none"
@@ -55,23 +90,50 @@
                 }
 
                 function showUpdate(thisElem){
-                    var rowElement = r.parentNode.parentNode;
-                    personid = rowElement.getAttribute("id");
+                        var rowElement = thisElem.parentNode.parentNode;
+                        person = readPersonFromRow(rowElement)
+                        populateForm(person)
 
-                    document.getElementById("idInput").value = personid
-                    document.getElementById("idInput").disabled = true
+                        
 
                     document.getElementById('display').style.display = "none"
                     document.getElementById('update-button').style.display = "block"
                     document.getElementById('create-button').style.display = "none"
                     document.getElementById('create-update').style.display ="block"
-
                 }
-                function doCreate(){
-                    console.log("indo create")
-                    person = getPersonFromForm()
-                    console.log(person)
-                    $.ajax({
+
+                function readPersonFromRow(rowElement){
+                    person = {}
+                    person.personid = rowElement.getAttribute("id");
+                    person.personname=rowElement.cells[1].firstChild.textContent
+                    person.age=rowElement.cells[2].firstChild.textContent
+
+                    return person
+                    }
+
+                function populateForm(person){
+                    var form = document.getElementById('createUpdateForm')
+                    
+                    form.querySelector('input[name="personid"]').value = person.personid
+                    form.querySelector('input[name="personid"]').disabled=true
+
+                    form.querySelector('input[name="personname"]').value = person.personname
+                    form.querySelector('input[name="age"]').value = person.age
+                }
+                function clearForm(){
+                    var form = document.getElementById('createUpdateForm')
+                    
+                    form.querySelector('input[name="personid"]').value = ''
+                    form.querySelector('input[name="personid"]').disabled = false
+
+
+                    form.querySelector('input[name="personname"]').value = ''
+                    form.querySelector('input[name="age"]').value = ''
+                }
+              function doCreate(){
+                  console.log("in do create")
+                  person = getPersonFromForm()
+                  $.ajax({
                         url:"/person",
                         data:JSON.stringify(person),
                         method:"POST",
@@ -81,32 +143,67 @@
                             console.log(result)
                             addPersonToTable(person)
                             showDisplay()
+                            clearForm()
                         },
                         error:function(hxr,status,error){
                             console.log("error"+error)
+                        }        
+                  })
+                                  
+              }
+                           
+
+                function doUpdate(){
+                    person = getPersonFromForm()
+                    updateServer(person)
+                                   
+                }
+                function updateServer(person){
+                      $.ajax({
+                        url:"/person/" +person.personid,
+                        data:JSON.stringify(person),
+                        method:"PUT",
+                        dataType:"JSON",
+                        contentType:"application/json; charset=utf-8",
+                        success:function(result){
+                            console.log(result)
+                            updateTableRow(person)
+                            showDisplay()
+                            clearForm()
+                        },
+                        error:function(hxr,status,error){
+                          console.log("error"+error)
                         }
                     })
-                    
                 }
-                function doDelete(r){
+                    function updateTableRow(person){
+                          rowElement = document.getElementById(person.personid)
+                          rowElement.cells[1].firstChild.textContent = person.personname
+                          rowElement.cells[2].firstChild.textContent = person.age
+                         
+
+                }
+                function doDelete(thisElem){
                     var tableElement = document.getElementById('personTable');
-                    var rowElement = r.parentNode.parentNode;
+                    var rowElement = thisElem.parentNode.parentNode;
                     var index = rowElement.rowIndex;
                     personid = rowElement.getAttribute("id");
                     $.ajax({
-                        url:"/person/"+personid,
-                        //date:JSON.stringify(person),
-                        method:"DELETE",
-                        dataType:"JSON",
-                        //contentType:"application/json; charset=utf-8",
-                        success:function(result){
-                              tableElement.deleteRow(index);
-                        },
-                        error:function(xhr,status,error){
-                            console.log(error)
-                        }
+                      url:"/person/"+personid,
+                      date:JSON.stringify(person),
+                      method:"DELETE",
+                      dataType:"JSON",
+                      contentType:"application/json; charset=utf-8",
+                      success:function(result){
+                           tableElement.deleteRow(index);
+                      },  
+                      error:function(xhr,status,error){
+                           console.log(error)       
+                      } 
                     })
                 }
+
+                
 
                 function getPersonFromForm(){
                     var form = document.getElementById('createUpdateForm')
@@ -114,48 +211,49 @@
                     person.personid = form.querySelector('input[name="personid"]').value
                     person.personname = form.querySelector('input[name="personname"]').value
                     person.personage = form.querySelector('input[name="age"]').value
-                    //console.log(person)
+                    console.log(person)
                     return person
-                }
+                    }
 
 
                 function showDisplay(){
                     document.getElementById('display').style.display="block"
                     document.getElementById('create-update').style.display="none"
-                }
+                    }
                 function populateTable(){
                          //ajax getAll
-                    $.ajax({
-                        url:"http://127.0.0.1:5000/person",
-                        method:"GET",
-                        datatype:"JSON",
-                        success:function(results){
-                            for (person of results){
+                         $.ajax({
+                            url:"http://127.0.0.1:5000/person",
+                            method:"GET",
+                            datatype:"JSON",
+                            success:function(results){
+                              for (person of results){
                                 addPersonToTable(person)
                             }
                         },
                         error:function(xhr,status,error){
                             console.log("error "+error+" code:"+status)
                         }
-                    })
+                     })
                 }
-                function addPersonToTable(person){
-                       //console.log("Working so far")
-                    tableElem = document.getElementById("personTable")
-                    rowElem = tableElem.insertRow(-1)
-                    rowElem.setAttribute("id", person.personid)
-                    cell1 = rowElem.insertCell(0)
-                    cell1.innerHTML = person.personid
-                    cell2 = rowElem.insertCell(1)
-                    cell2.innerHTML = person.personname
-                    cell3 = rowElem.insertCell(2)
-                    cell3.innerHTML = person.age
-                    cell4 = rowElem.insertCell(3)
-                    cell4.innerHTML ='<button onclick="showUpdate(this)">Update</button>'
-                    cell5 = rowElem.insertCell(4)
-                    cell5.innerHTML = '<button onclick="doDelete(this)">delete</button>'
-                }   
-                populateTable()
+                        function addPersonToTable(person){
+                                //console.log("Working so far")
+                            tableElem = document.getElementById("personTable")
+                            rowElem = tableElem.insertRow(-1)
+                            rowElem.setAttribute("id", person.personid)
+                            cell1 = rowElem.insertCell(0)
+                            cell1.innerHTML = person.personid
+                            cell2 = rowElem.insertCell(1)
+                            cell2.innerHTML = person.personname
+                            cell3 = rowElem.insertCell(2)
+                            cell3.innerHTML = person.age
+                            cell4 = rowElem.insertCell(3)
+                            cell4.innerHTML ='<button onclick="showUpdate(this)">Update</button>'
+                            cell5 = rowElem.insertCell(4)
+                            cell5.innerHTML = '<button onclick="doDelete(this)">Delete</button>'
+                        }   
+                        populateTable()
+                       
             </script>
     
     </body>
