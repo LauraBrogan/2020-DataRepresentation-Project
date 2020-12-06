@@ -1,30 +1,14 @@
-from flask import Flask, url_for, request, redirect, abort, jsonify 
+from flask import Flask, url_for, request, redirect, abort, jsonify
 from PersonDao import personDao
+
 
 app = Flask(__name__,
             static_url_path='', 
             static_folder='staticpages')
 
-#newperson = [
-   # {
-    #    "personid":"4",
-    #    "personname":"Joesph",
-    #    "age":"65"
-     #},
-   # {
-    #     "personid":"6",
-   #     "personname":"Tim",
-   #     "age":"72"
-   # },
-   # {
-   ##      "personid":"10",
-   #     "personname":"Margaret",
-   #     "age":"69"
-  #  }
-#]
-@app.route('/')
-def index():
-        return "hello"
+#@app.route('/')
+#def index():
+        #return "hello"
     #get all
 
 @app.route('/person')
@@ -46,35 +30,38 @@ def findById(personid):
 
 @app.route('/person/', methods=['POST'])
 def create():
-        return"served by createuser"
-    #if not request.json:
-       # abort(400)
+    #global nextId
+    #return"served by createuser"
+    if not request.json:
+        abort(400)
       #  if not 'personid' in request.json:
      #   abort(400)
-    #newperson={
-     #   "personid":  request.json["personid"],
-      #  "personname": request.json["personname"],
-      #  "age":request.json["age"]
-    #}
-   # return jsonify(personDao.create(newperson))
+    person = {
+        #"personid":  nextId,
+            "personid": request.json["personid"],
+            "personname": request.json["personname"],
+            "age":request.json["age"]
+    }
+    return jsonify(personDao.create(person))
     #return"served by Create"
-    #person.append(newperson)
+    #person.append(person)
+    #nextId+=1
     #return jsonify( {'personid':personid }),201
 # sample test 
 # curl -X POST -d "{\"personid\":10, \"personname\":\"joesphine\", \"age\":46}" -H Content-Type:application/json http://127.0.0.1:5000/person/
 @app.route('/person/<int:personid>', methods=['PUT'])
 def update(personid):
-    foundperson=personDao.findByID(personid)
-    #print(foundperson)
-    if foundperson == {}:
-        return jsonify({}),404
-    currentperson = foundperson
+    foundPerson=personDao.findByID(personid)
+    print(foundPerson)
+    if foundPerson == {}:
+       return jsonify({}),404
+    currentPerson = foundPerson
     if 'personname' in request.json:
-        currentperson['personname']= request.json['personname']
+        currentPerson['personname']= request.json['personname']
     if 'age' in request.json:
-        currentperson['age']= request.json['age']
-    personDao.update(currentperson)
-    return jsonify(currentperson)
+        currentPerson['age']= request.json['age']
+    personDao.update(currentPerson)
+    return jsonify(currentPerson)
 #curl -X PUT -d "{\"personname\":\"test\", \"age\":46}" -H Content-Type:application/json http://127.0.0.1:5000/person/4
 
 #DELETE
@@ -86,7 +73,7 @@ def delete(personid):
 
 #@app.errorhandler(404)
 #def not_found404(error):
-#   return make_response( jsonify( {'error':'Not found' }), 404)
+   #return make_response( jsonify( {'error':'Not found' }), 404)
 
 #@app.errorhandler(400)
 #def not_found400(error):
@@ -96,3 +83,4 @@ def delete(personid):
 if __name__ == '__main__' :
     app.run(debug= True)
 
+#Laura Brogan 06/12/2020
