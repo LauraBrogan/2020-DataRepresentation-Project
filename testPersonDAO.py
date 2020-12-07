@@ -1,3 +1,5 @@
+#This was a testing file I used to test the commands in the PersonDao.py 
+# to return the results to ther terminal
 from PersonDao import personDao
 
 
@@ -27,3 +29,5 @@ returnValue =  personDao.delete(person2['personid'])
 print (returnValue)
 returnValue =  personDao.getAll() 
 print (returnValue)
+
+# Laura Brogan 06/12/2020

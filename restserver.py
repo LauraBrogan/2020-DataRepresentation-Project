@@ -1,7 +1,7 @@
+#Server file for data representation project to link to data access object.
 from flask import Flask, url_for, request, redirect, abort, jsonify
 from PersonDao import personDao
-
-
+# curl commmands are included below each command, this makes it easier for testing. 
 app = Flask(__name__,
             static_url_path='', 
             static_folder='staticpages')
@@ -9,24 +9,19 @@ app = Flask(__name__,
 #@app.route('/')
 #def index():
         #return "hello"
-    #get all
+    #get            This was test code
 
 @app.route('/person')
 def getAll():
     return jsonify(personDao.getAll())
 
-# curl -i http://127.0.0.1:5000/person
+# curl  http://127.0.0.1:5000/person
+
 @app.route('/person/<int:personid>')
 def findById(personid):
     return jsonify(personDao.findByID(personid))
 
-#@app.route('/person/<string:personid>', methods =['GET'])
-#def get_person(personid):
- #   foundperson = list(filter(lambda t : t['personid'] == personid, person))
- #   if len(foundperson) == 0:
- #       return jsonify( { 'personid' : '' }),204
-  #  return jsonify( { 'personid' : foundperson[0] })
-#curl -i http://127.0.0.1:5000/person/test  ?????
+#curl  http://127.0.0.1:5000/person/9  
 
 @app.route('/person/', methods=['POST'])
 def create():
@@ -34,8 +29,8 @@ def create():
     #return"served by createuser"
     if not request.json:
         abort(400)
-      #  if not 'personid' in request.json:
-     #   abort(400)
+    if not 'personid' in request.json:
+        abort(400)
     person = {
         #"personid":  nextId,
             "personid": request.json["personid"],
@@ -49,6 +44,7 @@ def create():
     #return jsonify( {'personid':personid }),201
 # sample test 
 # curl -X POST -d "{\"personid\":10, \"personname\":\"joesphine\", \"age\":46}" -H Content-Type:application/json http://127.0.0.1:5000/person/
+
 @app.route('/person/<int:personid>', methods=['PUT'])
 def update(personid):
     foundPerson=personDao.findByID(personid)
@@ -65,11 +61,13 @@ def update(personid):
 #curl -X PUT -d "{\"personname\":\"test\", \"age\":46}" -H Content-Type:application/json http://127.0.0.1:5000/person/4
 
 #DELETE
-#curl -X DELETE http://127.0.0.1:5000/person/2
+
 @app.route('/person/<int:personid>', methods = ['DELETE'])
 def delete(personid):
     personDao.delete(personid)
     return jsonify({"done": True})
+#curl -X DELETE http://127.0.0.1:5000/person/2
+
 
 #@app.errorhandler(404)
 #def not_found404(error):

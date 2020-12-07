@@ -1,3 +1,5 @@
+#This was a testing file I used to test the dbconfig on the rest server.
+
 import mysql.connector
 import dbconfig as cfg
 
