@@ -66,7 +66,8 @@ text-align: center;
                         </td>    
                 </table>
             </div>
- <!--the people screen to view records with the option to update or delete-->           
+ <!--the people screen to view records with the option to update or delete-->    
+        <!--The below div tag defines a division/section in HTML document it is used to group elements. -->
             <div id="display">
                 <h2>People</h2>
                 <button onClick="showCreate()">Create</button>
@@ -83,7 +84,7 @@ text-align: center;
 
             </div>
             <script>
-// Inside the script tags are the functions.
+//The script tag is used to embed Javascript. Inside the script tags are the functions.
                 function showCreate(){
                     document.getElementById('display').style.display = "none"
                     document.getElementById('update-button').style.display = "none"
@@ -111,7 +112,7 @@ text-align: center;
 
                     return person
                     }
-
+                    //when updating form, opens create update pre-populated with the person details which can then be updated. 
                 function populateForm(person){
                     var form = document.getElementById('createUpdateForm')
                     
@@ -121,6 +122,7 @@ text-align: center;
                     form.querySelector('input[name="personname"]').value = person.personname
                     form.querySelector('input[name="age"]').value = person.age
                 }
+                //when update is done form is clerared for next time
                 function clearForm(){
                     var form = document.getElementById('createUpdateForm')
                     
@@ -131,6 +133,8 @@ text-align: center;
                     form.querySelector('input[name="personname"]').value = ''
                     form.querySelector('input[name="age"]').value = ''
                 }
+
+                //Calling Ajax to create new item in the table
               function doCreate(){
                   console.log("in do create")
                   person = getPersonFromForm()
@@ -159,6 +163,7 @@ text-align: center;
                     updateServer(person)
                                    
                 }
+                //Calling Ajax to update the server
                 function updateServer(person){
                       $.ajax({
                         url:"/person/" +person.personid,
@@ -177,6 +182,7 @@ text-align: center;
                         }
                     })
                 }
+                //updateing table row
                     function updateTableRow(person){
                           rowElement = document.getElementById(person.personid)
                           rowElement.cells[1].firstChild.textContent = person.personname
@@ -184,6 +190,7 @@ text-align: center;
                          
 
                 }
+                //Calling Ajax to delete item from the table
                 function doDelete(thisElem){
                     var tableElement = document.getElementById('personTable');
                     var rowElement = thisElem.parentNode.parentNode;
@@ -203,9 +210,7 @@ text-align: center;
                       } 
                     })
                 }
-
-                
-
+                // getting person from for updating
                 function getPersonFromForm(){
                     var form = document.getElementById('createUpdateForm')
                     var person = {}
@@ -221,6 +226,7 @@ text-align: center;
                     document.getElementById('display').style.display="block"
                     document.getElementById('create-update').style.display="none"
                     }
+                //Calling Ajax to populate the the table    
                 function populateTable(){
                          //ajax getAll
                          $.ajax({
@@ -237,7 +243,7 @@ text-align: center;
                         }
                      })
                 }
-                //
+                        // layout of table on html page
                         function addPersonToTable(person){
                                 //console.log("Working so far")
                             tableElem = document.getElementById("personTable")
@@ -257,6 +263,6 @@ text-align: center;
                         populateTable()
                        
             </script>
-    
+    <!--End script and ending HTMl tags-->
     </body>
 </html>

@@ -14,21 +14,30 @@ From completeing this project and overcoming my initial difficulties, in creatin
 
 In this project I create a basic Flask server that has a REST API, to perform CRUD operations, with one database tabee and the accompanying web interface, using AJAX calls to perform these CRUD operation.   I had intended on using two tables and had created them in mysql but only used the one as I had difficulty with getting this code to work. 
 
->*<p align="justify"> 
-
 ## My Respoitory Contains the following files:
-staticpages(index.html)
-.gitignore
-license
-PersonDao.py
-Project description.pdf
-READMe.md
-dbconfigtemplate.py
-initdb.sql
-requirements.txt
-restserver.py
-testpersonDAO.py
-testSelect.py
+-staticpages(index.html)
+
+-.gitignore
+
+-license
+
+-PersonDao.py
+
+-Project description.pdf
+
+-READMe.md - which is this file
+
+-dbconfigtemplate.py
+
+-initdb.sql
+
+-requirements.txt
+
+-restserver.py
+
+-testpersonDAO.py
+
+-testSelect.py
 
 ## My Repositiory can be download from git hub 
 1. Go to Git Hub using the following link [Click Here:](https://github.com/LauraBrogan/2020-DataRepresentation-Project)
